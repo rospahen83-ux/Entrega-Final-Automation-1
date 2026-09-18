@@ -1,0 +1,670 @@
+{
+  "name": "Entrega Final",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {
+          "maxOutputTokens": 300,
+          "temperature": 0
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        -192,
+        128
+      ],
+      "id": "28cbdad5-446a-4b57-bb9b-0413b1b9f78e",
+      "name": "GeminiChat model 3 flash review",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "vCMw4TABGtB6A65W",
+          "name": "Google Gemini(PaLM) Api account 7"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "filters": {}
+      },
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -592,
+        -272
+      ],
+      "id": "cf6aaecc-9834-43e9-8069-1fb9637d4b37",
+      "name": "Recibe el mensaje",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "RM6bSCyzrrZdacwa",
+          "name": "Gmail account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "10b1b1d8-9bf0-4048-bff5-09510faaeb30",
+              "name": "Asunto",
+              "value": "={{ $json.Subject }}",
+              "type": "string"
+            },
+            {
+              "id": "f4ffcf4f-0e82-472d-85d6-f42e13836b75",
+              "name": "email",
+              "value": "={{ $json.From }}",
+              "type": "string"
+            },
+            {
+              "id": "6fb47e15-0d60-4610-b3b7-9b305873f4f4",
+              "name": "Mensaje",
+              "value": "={{ $json.snippet }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        -464,
+        -80
+      ],
+      "id": "18297e3a-1438-457a-9bf0-6e5413f67bf5",
+      "name": "Ordena informacion"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "appHIkRdUD7Mv707X",
+          "mode": "list",
+          "cachedResultName": "Untitled Base",
+          "cachedResultUrl": "https://airtable.com/appHIkRdUD7Mv707X"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl3NUEHlpSOesrIF",
+          "mode": "list",
+          "cachedResultName": "Tickets de soporte",
+          "cachedResultUrl": "https://airtable.com/appHIkRdUD7Mv707X/tbl3NUEHlpSOesrIF"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $('Crea el record').item.json.id }}",
+            "Categoria de Urgencia": "={{ $('Analiza el Record').item.json.text }}",
+            "Respuesta propuesta por IA": "={{ $('Analiza el Record').item.json.text }}",
+            "Estado": "Procesado por IA"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Asunto",
+              "displayName": "Asunto",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Remitente",
+              "displayName": "Remitente",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Mensaje original",
+              "displayName": "Mensaje original",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Estado",
+              "displayName": "Estado",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Pendiente",
+                  "value": "Pendiente"
+                },
+                {
+                  "name": "Procesado por IA",
+                  "value": "Procesado por IA"
+                },
+                {
+                  "name": "Aprobado por humano",
+                  "value": "Aprobado por humano"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Categoria de Urgencia",
+              "displayName": "Categoria de Urgencia",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Urgente",
+                  "value": "Urgente"
+                },
+                {
+                  "name": "Medio",
+                  "value": "Medio"
+                },
+                {
+                  "name": "Bajo",
+                  "value": "Bajo"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Respuesta propuesta por IA",
+              "displayName": "Respuesta propuesta por IA",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Todo",
+                  "value": "Todo"
+                },
+                {
+                  "name": "In progress",
+                  "value": "In progress"
+                },
+                {
+                  "name": "Done",
+                  "value": "Done"
+                }
+              ],
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Attachments",
+              "displayName": "Attachments",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Attachment Summary",
+              "displayName": "Attachment Summary",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "typecast": true
+        }
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        336,
+        -96
+      ],
+      "id": "17a0a36c-b3e4-4938-80fd-3c9d95fedb1d",
+      "name": "Update record",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "54sBJaLMkA630spj",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "appHIkRdUD7Mv707X",
+          "mode": "list",
+          "cachedResultName": "Untitled Base",
+          "cachedResultUrl": "https://airtable.com/appHIkRdUD7Mv707X"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl3NUEHlpSOesrIF",
+          "mode": "list",
+          "cachedResultName": "Tickets de soporte",
+          "cachedResultUrl": "https://airtable.com/appHIkRdUD7Mv707X/tbl3NUEHlpSOesrIF"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Asunto": "={{ $json.Asunto }}",
+            "Remitente": "={{ $json.email }}",
+            "Mensaje original": "={{ $json.Mensaje }}",
+            "Estado": "Pendiente"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Asunto",
+              "displayName": "Asunto",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Remitente",
+              "displayName": "Remitente",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Mensaje original",
+              "displayName": "Mensaje original",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Estado",
+              "displayName": "Estado",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Pendiente",
+                  "value": "Pendiente"
+                },
+                {
+                  "name": "Procesado por IA",
+                  "value": "Procesado por IA"
+                },
+                {
+                  "name": "Aprobado por humano",
+                  "value": "Aprobado por humano"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Categoria de Urgencia",
+              "displayName": "Categoria de Urgencia",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Urgente",
+                  "value": "Urgente"
+                },
+                {
+                  "name": "Medio",
+                  "value": "Medio"
+                },
+                {
+                  "name": "Bajo",
+                  "value": "Bajo"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Respuesta propuesta por IA",
+              "displayName": "Respuesta propuesta por IA",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Todo",
+                  "value": "Todo"
+                },
+                {
+                  "name": "In progress",
+                  "value": "In progress"
+                },
+                {
+                  "name": "Done",
+                  "value": "Done"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Attachments",
+              "displayName": "Attachments",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Attachment Summary",
+              "displayName": "Attachment Summary",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        -320,
+        -80
+      ],
+      "id": "4fd7aa01-ddf2-4804-b0fd-ae88c0efdae5",
+      "name": "Crea el record",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "54sBJaLMkA630spj",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Eres un asistente experto en soporte técnico. Analiza el siguiente mensaje de un cliente y haz dos cosas:\n1. Clasifica la urgencia eligiendo UNICAMENTE entre: \"Urgente\", \"Medio\" o \"Bajo\".\n2. Redacta una respuesta profesional y empática para el cliente.\n\nMensaje del cliente:\n{{ $json.fields['Mensaje original'] }}\n\nDevuelve la salida estructurada así:\nUrgencia: [Urgente/Medio/Bajo]\nRespuesta: [Tu propuesta de respuesta]",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "=Eres un asistente experto en soporte técnico y clasificación de tickets para atención al cliente. Tu objetivo es analizar mensajes, clasificar su nivel de urgencia de forma estricta y redactar respuestas profesionales y empáticas."
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        -192,
+        -80
+      ],
+      "id": "389b9cb6-7136-42dc-8a11-b651dc80823b",
+      "name": "Analiza el Record"
+    },
+    {
+      "parameters": {
+        "sendTo": "rospahen83@gmail.com",
+        "subject": "Aprobacion de flujo n8n",
+        "emailType": "text",
+        "message": "=Hola, el flujo se ha pausado. Haz clic aquí para aprobar: {{ $execution.resumeUrl }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        80,
+        -96
+      ],
+      "id": "157a01a6-61c9-4059-a1db-4370495584db",
+      "name": " Aprobacion humana",
+      "webhookId": "2f1b4fdb-2d0b-4ca0-88c0-765d6c0bc632",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "RM6bSCyzrrZdacwa",
+          "name": "Gmail account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resume": "webhook",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        208,
+        -96
+      ],
+      "id": "01821637-3b6e-4cca-b6b6-e45f7ee2f43d",
+      "name": "Espera",
+      "webhookId": "77f54d55-ff0f-4917-8899-c41fd6f4b5e4"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.fields.Remitente }}",
+        "subject": "Hemos procesado tu solicitud",
+        "emailType": "text",
+        "message": "Recibimos tu mensaje, tu solicitud ya fue procesada, nuestro servicio tecnico se presentara dentro de las 24 horas. Gracias",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        464,
+        -96
+      ],
+      "id": "628c14cb-3cb7-48ac-8531-62128f4415d2",
+      "name": "Mensaje solicitud recibida",
+      "webhookId": "bcca638b-161c-44e7-b36c-dd222118a90f",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "RM6bSCyzrrZdacwa",
+          "name": "Gmail account 3"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "GeminiChat model 3 flash review": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Analiza el Record",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Recibe el mensaje": {
+      "main": [
+        [
+          {
+            "node": "Ordena informacion",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ordena informacion": {
+      "main": [
+        [
+          {
+            "node": "Crea el record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crea el record": {
+      "main": [
+        [
+          {
+            "node": "Analiza el Record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analiza el Record": {
+      "main": [
+        [
+          {
+            "node": " Aprobacion humana",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update record": {
+      "main": [
+        [
+          {
+            "node": "Mensaje solicitud recibida",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    " Aprobacion humana": {
+      "main": [
+        [
+          {
+            "node": "Espera",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Espera": {
+      "main": [
+        [
+          {
+            "node": "Update record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "4adaf543-c1f9-471d-a59c-7ecb3a6d8121",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "dc0c270d458746fa0fb1b46020c24626479e566f0607acd486a1d672a78ce332"
+  },
+  "nodeGroups": [],
+  "id": "QLjWtd5XFLUtW9RU",
+  "tags": []
+}
